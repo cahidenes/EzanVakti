@@ -14,9 +14,9 @@ Diyanet İşleri Başkanlığı tarafından yayınlanan ezan vakitlerini göster
 
 ![ayarlar](screenshots/ayarlar.png)
 
-### Tray İkonu
+### Görev Çubuğu İkonu
 
-Uygulama çalıştırdığında bir sonraki vakte kalan dakika ikon olarak gösterilir.
+Uygulama çalıştırdığında bir sonraki vakte kalan dakika görev çubuğunda ikon olarak gösterilir.
 
 ![tray ikonu](screenshots/tray_icon.png)
 
@@ -26,7 +26,7 @@ Kalan dakika 3 farklı şekilde gösterilebilir:
 
 Sadece kalan dakika gösterilir. Vaktin üzerinden 9 dakikaya kadar geçmişse - dakika olarak gösterebilir: <img src="icons/-5.svg" width="20"/>
 
-**-9** ile **99** arasındaki değerleri gösterebilir.
+**-9** ile **99 (1:39)** arasındaki değerleri gösterebilir.
 
 #### Saat:Dakika Modu: <img src="icons/1:23.svg" width="20"/>
 
