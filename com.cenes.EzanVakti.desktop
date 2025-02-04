@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+
+Name=Ezan Vakti
+Comment=Diyanet İşleri Başkanlığının yayınladığı ezan vakitlerine uygun tray ikonu ve masaüstü uygulaması
+Categories=Utility;Clock;
+
+Icon=ezanvakti.icon
+Exec=python3 main.py
+Terminal=false

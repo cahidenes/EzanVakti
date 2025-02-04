@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.cenes.EzanVakti</id>
+  
+  <name>Ezan Vakti</name>
+  <summary>Ezan vakitlerini gösteren görev çubuğu ikonu ve masaüstü uygulaması</summary>
+  <url type="homepage">https://github.com/cahidenes/EzanVakti</url>
+  <developer id="com.cenes">
+    <name>Cahid Enes Keleş</name>
+  </developer> 
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>MIT-0</project_license>
+
+  <content_rating type="oars-1.1" />
+
+  
+  <description>
+    <p>
+      Diyanet İşleri Başkanlığının yayınladığı ezan vakitlerini çeker, tray ikonu olarak ve masaüstü uygulaması olarak gösterir.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">com.cenes.EzanVakti.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/cahidenes/EzanVakti/blob/main/screenshots/vakitler.png?raw=true</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/cahidenes/EzanVakti/blob/main/screenshots/ayarlar.png?raw=true</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/cahidenes/EzanVakti/blob/main/screenshots/tray_icon.png?raw=true</image>
+    </screenshot>
+  </screenshots>
+</component>
