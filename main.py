@@ -67,12 +67,15 @@ class Settings():
             else:
                 req = requests.get("https://ezanvakti.emushaf.net/ilceler/" + id).json()
                 self.ilceler = {ilce['IlceAdi']: ilce['IlceID'] for ilce in req}
+                if 'ilceler' not in self.settings:
+                    self.update(self.settings['ulke'], self.settings['sehir'], self.settings['ilce'])
             return list(self.ilceler.keys())
         except Exception as e:
             print("İlçeler alınamadı. İnternet bağlantınızı kontrol ediniz.")
             return []
     
     def update(self, ulkeAdi, sehirAdi, ilceAdi):
+        print("Şehir güncelleniyor...")
         self.settings['ulke'] = ulkeAdi
         self.settings['ulke_id'] = self.ulkeler[ulkeAdi]
         self.settings['sehir'] = sehirAdi
@@ -108,6 +111,7 @@ class Vakitler():
         GLib.timeout_add_seconds(86400 - self.get_now_seconds() + 5, self.yeni_gun_updater)
     
     def update(self):
+        print("Vakitler güncelleniyor...")
         try:
             self._vakitler = requests.get("https://ezanvakti.emushaf.net/vakitler/" + settings.settings['ilce_id']).json()
             with open(VAKIT_FILE, 'w') as f:
