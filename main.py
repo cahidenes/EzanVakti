@@ -1,4 +1,5 @@
 import gi
+import os
 import re
 import requests
 import json
@@ -10,10 +11,26 @@ gi.require_version('AppIndicator3', '0.1')
 from gi.repository import Gtk, GLib, Gdk
 from gi.repository import AppIndicator3 as AppIndicator
 
-CONFIG_FILE = "config.json"
-VAKIT_FILE = "vakitler.json"
+config_dir = GLib.get_user_config_dir()
+CONFIG_FILE = config_dir + "/ezanvakti.config.json"
+VAKIT_FILE = config_dir + "/ezanvakti.vakitler.json"
+
 class Settings():
     def __init__(self):
+        if not os.path.exists(CONFIG_FILE):
+            with open(CONFIG_FILE, 'w') as f:
+                json.dump({
+                    'vakit_limit_1': -9,
+                    'vakit_limit_2': 100,
+                    'vakit_limit_3': 600,
+                    'vakit_limit_4': 1440,
+                    'ulke': 'TÜRKİYE',
+                    'ulke_id': '2',
+                    'sehir': 'İSTANBUL',
+                    'sehir_id': '539',
+                    'ilce': 'KARTAL',
+                    'ilce_id': '9542'
+                    }, f)
         with open(CONFIG_FILE) as f:
             self.settings = json.load(f)
     
@@ -79,6 +96,9 @@ class Settings():
 
 class Vakitler():
     def __init__(self):
+        if not os.path.exists(VAKIT_FILE):
+            with open(VAKIT_FILE, 'w') as f:
+                json.dump([], f)
         with open(VAKIT_FILE) as f:
             self._vakitler = json.load(f)
         self.yeni_gun_updater()
@@ -487,7 +507,6 @@ class TrayIcon:
             self.main_open = True
             MainApp()
             
-
 
 if __name__ == "__main__":
     settings = Settings()
