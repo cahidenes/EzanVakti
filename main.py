@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import gi
 import os
 import re
@@ -7,9 +9,9 @@ import datetime
 from pydbus import SystemBus
 
 gi.require_version('Gtk', '3.0')
-gi.require_version('AppIndicator3', '0.1')
-from gi.repository import Gtk, GLib, Gdk
-from gi.repository import AppIndicator3 as AppIndicator
+gi.require_version('AyatanaAppIndicator3', '0.1')
+from gi.repository import Gtk, GLib, Gdk, GdkPixbuf
+from gi.repository import AyatanaAppIndicator3 as AppIndicator
 
 config_dir = GLib.get_user_config_dir()
 CONFIG_FILE = config_dir + "/ezanvakti.config.json"
@@ -175,7 +177,6 @@ class Vakitler():
 class MainApp(Gtk.Window):
     def __init__(self):
         super().__init__(title="Main Screen")
-        self.set_icon_name("ezanvakti.icon")
 
         self.is_main = True
         self.nereye = ["İmsak'a", "Güneş'e", "Öğle'ye", "İkindi'ye", "Akşam'a", "Yatsı'ya", "İmsak'a"]
@@ -351,7 +352,7 @@ class MainApp(Gtk.Window):
             entry.set_width_chars(5)
             minute_limits_box.pack_start(entry, True, True, 0)
             minute_limits_box.pack_start(Gtk.Label(label="≤"), True, True, 0)
-            minute_limits_box.pack_start(Gtk.Image.new_from_icon_name(f'ezanvakti.{icon_name}', Gtk.IconSize.DND), True, True, 0)
+            minute_limits_box.pack_start(Gtk.Image.new_from_icon_name(f'com.cenes.EzanVakti.{icon_name}', Gtk.IconSize.DND), True, True, 0)
             if not last: minute_limits_box.pack_start(Gtk.Label(label="<"), True, True, 0)
         pack_input(-9, 0,     'vakit_limit_1', '12'     )
         pack_input(60, 100,   'vakit_limit_2', '3:45'   )
@@ -440,20 +441,31 @@ class TrayIcon:
         self.main_open = False
         self.minute = '-'
 
+        settings = Gtk.Settings.get_default()
+        settings.set_property("gtk-application-prefer-dark-theme", True)
+        settings.set_property("gtk-xft-antialias", 1)  # 1 = Enabled, 0 = Disabled
+
         self.indicator = AppIndicator.Indicator.new(
             "ezan_vakti_tray_icon",
-            "ezanvakti.-",
+            "com.cenes.EzanVakti.-",
             AppIndicator.IndicatorCategory.APPLICATION_STATUS
         )
         self.indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
         self.menu = Gtk.Menu()
-        open_item = Gtk.MenuItem(label="Open")
-        open_item.connect("activate", self.open_main)
-        self.menu.append(open_item)
-        quit_item = Gtk.MenuItem(label="Quit")
-        quit_item.connect("activate", Gtk.main_quit)
-        self.menu.append(quit_item)
+        def create_menu_item(label, icon_name, callback):
+            menu_item = Gtk.MenuItem()
+            box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+            icon = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
+            box.pack_start(icon, False, False, 0)
+            label_widget = Gtk.Label(label=label)
+            box.pack_start(label_widget, False, False, 0)
+            menu_item.add(box)
+            menu_item.connect("activate", callback)
+            menu_item.show_all()
+            return menu_item
+        self.menu.append(create_menu_item("Open", "com.cenes.EzanVakti.folder-open-symbolic", self.open_main))
+        self.menu.append(create_menu_item("Quit", "com.cenes.EzanVakti.application-exit", Gtk.main_quit))
         self.menu.show_all()
         self.indicator.set_menu(self.menu)
 
@@ -466,7 +478,7 @@ class TrayIcon:
         self.icon_update_loop()
 
     def update_icon(self):
-        format = "ezanvakti.{}"
+        format = "com.cenes.EzanVakti.{}"
         now = vakitler.get_now_seconds()
         seconds = vakitler.get_vakitler_seconds()
         if seconds is None:
@@ -513,6 +525,9 @@ class TrayIcon:
             
 
 if __name__ == "__main__":
+    icon_theme = Gtk.IconTheme.get_default()
+    pixbuf = icon_theme.load_icon("com.cenes.EzanVakti.icon", 64, 0)
+    Gtk.Window.set_default_icon(pixbuf)
     settings = Settings()
     vakitler = Vakitler()
     tray_icon = TrayIcon()

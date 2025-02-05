@@ -1,0 +1,4 @@
+requests
+pydbus
+PyGObject
+pystray

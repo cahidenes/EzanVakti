@@ -6,6 +6,6 @@ Name=Ezan Vakti
 Comment=Diyanet İşleri Başkanlığının yayınladığı ezan vakitlerine uygun tray ikonu ve masaüstü uygulaması
 Categories=Utility;Clock;
 
-Icon=ezanvakti.icon
-Exec=python3 main.py
+Icon=com.cenes.EzanVakti.icon
+Exec=ezanvakti
 Terminal=false
