@@ -217,7 +217,7 @@ class MainApp(Gtk.Window):
         self.header_bar.set_decoration_layout(":close")
 
         settings_button = Gtk.Button()
-        settings_button.set_tooltip_text("Open Settings")
+        settings_button.set_tooltip_text("Ayarlar")
         settings_icon = Gtk.Image.new_from_icon_name("settings-symbolic", Gtk.IconSize.BUTTON)
         settings_button.set_image(settings_icon)
         settings_button.connect("clicked", self.open_settings)
@@ -464,8 +464,8 @@ class TrayIcon:
             menu_item.connect("activate", callback)
             menu_item.show_all()
             return menu_item
-        self.menu.append(create_menu_item("Open", "com.cenes.EzanVakti.folder-open-symbolic", self.open_main))
-        self.menu.append(create_menu_item("Quit", "com.cenes.EzanVakti.application-exit", Gtk.main_quit))
+        self.menu.append(create_menu_item("Aç", "folder-open-symbolic", self.open_main))
+        self.menu.append(create_menu_item("Çık", "application-exit", Gtk.main_quit))
         self.menu.show_all()
         self.indicator.set_menu(self.menu)
 
