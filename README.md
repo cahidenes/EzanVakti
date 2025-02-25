@@ -6,7 +6,7 @@ Diyanet İşleri Başkanlığı tarafından yayınlanan ezan vakitlerini göster
 
 ## Kurulum
 
-    flatpak install com.cahidenes.EzanVakti
+TODO
 
 ## Özellikler
 

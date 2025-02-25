@@ -109,6 +109,7 @@ class Vakitler():
         self.yeni_gun_updater()
     
     def yeni_gun_updater(self):
+        print('yeni gun updater', self.get_now_seconds())
         self.vakitler_seconds = None
         GLib.timeout_add_seconds(86400 - self.get_now_seconds() + 5, self.yeni_gun_updater)
     
@@ -160,6 +161,7 @@ class Vakitler():
     
     def get_vakitler_seconds(self):
         if self.vakitler_seconds is None:
+            print('vakitler seconds guncellendi', self.get_now_seconds())
             if vakitler.bugun() is None or vakitler.yarin() is None:
                 return None
             self.vakitler_seconds = [
@@ -360,16 +362,25 @@ class MainApp(Gtk.Window):
         pack_input(60, 24*60, 'vakit_limit_4', '-', True)
 
         def save_minute_limits(button):
-            limit1 = minute_limits_box.get_children()[0].get_value()
-            limit2 = minute_limits_box.get_children()[4].get_value()
-            limit3 = minute_limits_box.get_children()[8].get_value()
-            limit4 = minute_limits_box.get_children()[12].get_value()
-            if limit1 <= limit2 <= limit3 <= limit4:
-                settings.save_minute_limits(limit1, limit2, limit3, limit4)
-                self.open_settings(button)
-                tray_icon.update_icon()
-            else:
-                dialog = Gtk.MessageDialog(parent=self, modal=True, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.OK, text="Dakika sınırları sıralı olmalıdır.")
+            def get_minute(index):
+                limit = minute_limits_box.get_children()[index].get_text()
+                if ':' in limit:
+                    saat, dakika = limit.split(':')
+                    return int(saat)*60 + int(dakika)
+                else:
+                    return int(limit)
+            try:
+                limit1, limit2, limit3, limit4 = [get_minute(x*4) for x in range(4)]
+                if limit1 <= limit2 <= limit3 <= limit4:
+                    settings.save_minute_limits(limit1, limit2, limit3, limit4)
+                    self.open_settings(button)
+                    tray_icon.update_icon()
+                else:
+                    dialog = Gtk.MessageDialog(parent=self, modal=True, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.OK, text="Dakika sınırları sıralı olmalıdır.")
+                    dialog.run()
+                    dialog.destroy()
+            except Exception as e:
+                dialog = Gtk.MessageDialog(parent=self, modal=True, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.OK, text=f"Dakikaları kaydederken bir hata oluştu: {e}")
                 dialog.run()
                 dialog.destroy()
         button = Gtk.Button.new_with_label("Dakika Sınırlarını Kaydet")
@@ -472,7 +483,7 @@ class TrayIcon:
         bus = SystemBus()
         login_manager = bus.get("org.freedesktop.login1")
         def on_prepare_for_sleep(sleeping):
-            if not sleeping: self.update_icon()
+            if not sleeping: GLib.timeout_add_seconds(1, self.update_icon)
         login_manager.onPrepareForSleep = on_prepare_for_sleep
 
         self.icon_update_loop()
